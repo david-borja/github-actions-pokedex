@@ -8,7 +8,7 @@ on:
 jobs:
   hello_world:
     # es recomendable poner una versión en específico. Si no, al salir una nueva versión, se puede romper todo
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     steps:
       # el nombre de los pasos es opcional
       - name: Echo the message

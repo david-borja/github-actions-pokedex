@@ -1,0 +1,28 @@
+name: Deployment Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-22.04
+    # las acciones se pueden componer de otras acciones
+    steps:
+      # esta acción sirve para traernos el código del repo a nuestra máquina de CI
+      # nos evita hacer a mano un git clone, pasarle el auth token, config etc
+      - uses: actions/checkout@v2
+        with:
+          # solo se trae el último commit, va más rápido
+          fetch-depth: 0
+      # ahora lo que queremos es instalar las deps y lintar el código
+      # podríamos con nvm instalar node, pero ya hay una acción escrita
+      - uses: actions/setup-node@v2
+        with:
+          # solo se trae el último commit, va más rápido
+          node-version: 14
+      - name: Install dependencies
+        run: npm install
+      - name: Lint
+        run: npm run eslint

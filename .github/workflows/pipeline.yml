@@ -23,6 +23,10 @@ jobs:
           # solo se trae el último commit, va más rápido
           node-version: 14
       - name: Install dependencies
-        run: npm install
+        run: npm install --no-audit --no-fund --no-optional # para que no instale dependencias opcionales
       - name: Lint
         run: npm run eslint
+      - name: Build
+        run: npm run build
+      - name: Test
+        run: npm test

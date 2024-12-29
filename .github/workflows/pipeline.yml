@@ -39,3 +39,8 @@ jobs:
           start: npm run start-test
           # le decimos que tiene que esperar a que el front se levante antes de ejecutar los tests
           wait-on: 'http://localhost:5000'
+      - name: 'Deploy to Netlify'
+        uses: jsmrcaga/action-netlify-deploy@v2.0.0
+        with:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}

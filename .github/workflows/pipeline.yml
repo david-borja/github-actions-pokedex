@@ -31,14 +31,14 @@ jobs:
         run: npm run build
       - name: Test
         run: npm test
-      # - name: E2E tests
-      #   uses: cypress-io/github-action@v2
-      #   with:
-      #     command: npm run test:e2e
-      #     # aunque esto esté en la linea de abajo, se ejecuta antes que los test en el comando de arriba
-      #     start: npm run start-test
-      #     # le decimos que tiene que esperar a que el front se levante antes de ejecutar los tests
-      #     wait-on: 'http://localhost:5000'
+      - name: E2E tests
+        uses: cypress-io/github-action@v5
+        with:
+          command: npm run test:e2e
+          # aunque esto esté en la linea de abajo, se ejecuta antes que los test en el comando de arriba
+          start: npm run start-test
+          # le decimos que tiene que esperar a que el front se levante antes de ejecutar los tests
+          wait-on: 'http://localhost:5000'
       # Install compatible Netlify CLI
       - name: Install Netlify CLI
         run: npm install -g netlify-cli@^6

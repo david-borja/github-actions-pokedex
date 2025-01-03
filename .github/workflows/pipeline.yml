@@ -56,10 +56,7 @@ jobs:
           NETLIFY_DEPLOY_TO_PROD: true
           build_directory: dist
       
-      - name: Status check
-        uses: Sibz/github-status-action@v1.1.1
+      - name: Health Check
+        uses: reybango/cypress-healthcheck-action@v1.2.0
         with:
-          # authToken: ${{ secrets.GITHUB_TOKEN }}
-          context: Netlify preview
-          state: success
-          target_url: https://${{secrets.NETLIFY_APP}}.netlify.app/health
+          url: https://${{secrets.NETLIFY_APP}}.netlify.app/health

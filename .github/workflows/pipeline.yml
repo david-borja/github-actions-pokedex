@@ -57,6 +57,7 @@ jobs:
           build_directory: dist
       
       - name: Health Check
-        uses: reybango/cypress-healthcheck-action@v1.2.0
+        uses: cypress-io/github-action@v2
         with:
-          url: https://${{secrets.NETLIFY_APP}}.netlify.app/health
+          wait-on: https://${{secrets.NETLIFY_APP}}.netlify.app/health
+          spec: cypress/healthcheck.cy.js

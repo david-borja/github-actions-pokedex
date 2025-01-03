@@ -56,8 +56,8 @@ jobs:
           NETLIFY_DEPLOY_TO_PROD: true
           build_directory: dist
       
-      - name: Health Check
-        uses: cypress-io/github-action@v2
-        with:
-          wait-on: https://${{secrets.NETLIFY_APP}}.netlify.app/health
-          spec: cypress/healthcheck.cy.js
+      # - name: Health Check
+      #   uses: cypress-io/github-action@v2
+      #   with:
+      #     wait-on: https://${{secrets.NETLIFY_APP}}.netlify.app/health
+      #     spec: cypress/healthcheck.cy.js

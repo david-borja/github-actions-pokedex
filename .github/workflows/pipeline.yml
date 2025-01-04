@@ -67,3 +67,9 @@ jobs:
           command: npx cypress run --spec cypress/e2e/healthcheck.cy.js
           wait-on: https://${{secrets.NETLIFY_APP}}.netlify.app
           spec: cypress/healthcheck.cy.js
+
+      - name: Rollback on Failure
+        if: failure()
+        run: |
+          echo "Health check failed, rolling back to previous deploy..."
+          netlify rollback --site ${{ secrets.NETLIFY_SITE_ID }} --auth ${{ secrets.NETLIFY_AUTH_TOKEN }}

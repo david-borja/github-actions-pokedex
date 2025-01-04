@@ -59,6 +59,7 @@ jobs:
       - name: Health Check
         uses: cypress-io/github-action@v2
         with:
+          env: BASE_URL=https://${{ secrets.NETLIFY_APP }}.netlify.app
           command: npx cypress run --spec cypress/e2e/healthcheck.cy.js
           wait-on: https://${{secrets.NETLIFY_APP}}.netlify.app
           spec: cypress/healthcheck.cy.js

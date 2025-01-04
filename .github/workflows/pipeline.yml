@@ -42,6 +42,7 @@ jobs:
           wait-on: 'http://localhost:5000'
       # Install compatible Netlify CLI
       - name: Install Netlify CLI
+        if: ${{ github.event_name == 'push' }}
         run: npm install -g netlify-cli@^6
       # Debugging step
       # - name: Debug Node.js and CLI

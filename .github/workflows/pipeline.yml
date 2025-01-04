@@ -50,6 +50,7 @@ jobs:
       #     npm -v
       #     netlify --version
       - name: 'Deploy to Netlify'
+        if: ${{ github.event_name == 'push' }}
         uses: jsmrcaga/action-netlify-deploy@v2.0.0
         with:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}

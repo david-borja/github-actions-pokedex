@@ -59,6 +59,6 @@ jobs:
       - name: Health Check
         uses: cypress-io/github-action@v2
         with:
-          command: npx cypress run --spec cypress/healthcheck.cy.js
+          command: npx cypress run --e2e cypress/healthcheck.cy.js
           wait-on: https://${{secrets.NETLIFY_APP}}.netlify.app
           spec: cypress/healthcheck.cy.js

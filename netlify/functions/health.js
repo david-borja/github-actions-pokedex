@@ -1,6 +1,6 @@
 exports.handler = async () => {
   return {
-    statusCode: 200,
-    body: 'ok',
+    statusCode: 500,
+    body: 'not ok',
   }
 }

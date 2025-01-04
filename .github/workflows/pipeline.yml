@@ -2,9 +2,10 @@ name: Deployment Pipeline
 
 on:
   push:
-    branches:
-      - main
-
+    branches: [main]
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize]
 jobs:
   deploy:
     runs-on: ubuntu-22.04
@@ -41,6 +42,7 @@ jobs:
           wait-on: 'http://localhost:5000'
       # Install compatible Netlify CLI
       - name: Install Netlify CLI
+        if: ${{ github.event_name == 'push' }}
         run: npm install -g netlify-cli@^6
       # Debugging step
       # - name: Debug Node.js and CLI
@@ -49,6 +51,7 @@ jobs:
       #     npm -v
       #     netlify --version
       - name: 'Deploy to Netlify'
+        if: ${{ github.event_name == 'push' }}
         uses: jsmrcaga/action-netlify-deploy@v2.0.0
         with:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
@@ -64,3 +67,9 @@ jobs:
           command: npx cypress run --spec cypress/e2e/healthcheck.cy.js
           wait-on: https://${{secrets.NETLIFY_APP}}.netlify.app
           spec: cypress/healthcheck.cy.js
+
+      - name: Rollback on Failure
+        if: failure()
+        run: |
+          echo "Health check failed, rolling back to previous deploy..."
+          netlify rollback --site ${{ secrets.NETLIFY_SITE_ID }} --auth ${{ secrets.NETLIFY_AUTH_TOKEN }}

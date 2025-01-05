@@ -56,7 +56,7 @@ jobs:
         run: npm ci
       - name: Build
         run: npm run build
-      - uses: actions/upload-artifact@v2 # con esta acción, guardamos la build para reutilizarla en el siguiente paso de test
+      - uses: actions/upload-artifact@v4 # con esta acción, guardamos la build para reutilizarla en el siguiente paso de test
         with:
           name: dist
           path: dist
@@ -81,7 +81,7 @@ jobs:
       - name: Install dependencies
         # run: npm install --no-audit --no-fund --no-optional # para que no instale dependencias opcionales
         run: npm ci
-      - uses: actions/download-artifact@v2 # descargamos el artefacto de build
+      - uses: actions/download-artifact@v4 # descargamos el artefacto de build
         with:
           name: dist
           path: dist
@@ -108,7 +108,7 @@ jobs:
       - name: Install dependencies
         # run: npm install --no-audit --no-fund --no-optional # para que no instale dependencias opcionales
         run: npm ci
-      - uses: actions/download-artifact@v2 # descargamos el artefacto de build
+      - uses: actions/download-artifact@v4 # descargamos el artefacto de build
         with:
           name: dist
           path: dist

@@ -11,6 +11,10 @@ jobs:
     runs-on: ubuntu-22.04
     # las acciones se pueden componer de otras acciones
     steps:
+      - name: Cancel Previous Redundatn Builds
+        uses: styfle/cancel-workflow-action@0.12.1
+        with:
+          access_token: ${{ github.token }}
       # esta acción sirve para traernos el código del repo a nuestra máquina de CI
       # nos evita hacer a mano un git clone, pasarle el auth token, config etc
       - uses: actions/checkout@v2

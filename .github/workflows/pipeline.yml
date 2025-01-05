@@ -28,6 +28,7 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           # solo se trae el último commit, va más rápido
+          cache: 'npm'
           node-version: '14' # esto en número o en string?
       - name: Install dependencies
         # run: npm install --no-audit --no-fund --no-optional # para que no instale dependencias opcionales
@@ -50,6 +51,7 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           # solo se trae el último commit, va más rápido
+          cache: 'npm'
           node-version: '14' # esto en número o en string?
       - name: Install dependencies
         # run: npm install --no-audit --no-fund --no-optional # para que no instale dependencias opcionales
@@ -77,6 +79,7 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           # solo se trae el último commit, va más rápido
+          cache: 'npm'
           node-version: '14' # esto en número o en string?
       - name: Install dependencies
         # run: npm install --no-audit --no-fund --no-optional # para que no instale dependencias opcionales
@@ -104,6 +107,7 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           # solo se trae el último commit, va más rápido
+          cache: 'npm'
           node-version: '14' # esto en número o en string?
       - name: Install dependencies
         # run: npm install --no-audit --no-fund --no-optional # para que no instale dependencias opcionales
@@ -135,6 +139,7 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           # solo se trae el último commit, va más rápido
+          cache: 'npm'
           node-version: '14' # esto en número o en string?
       # Install compatible Netlify CLI
       - name: Install Netlify CLI

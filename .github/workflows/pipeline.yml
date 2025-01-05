@@ -132,6 +132,10 @@ jobs:
         with:
           # solo se trae el último commit, va más rápido
           fetch-depth: 0
+      - uses: actions/setup-node@v2
+        with:
+          # solo se trae el último commit, va más rápido
+          node-version: '14' # esto en número o en string?
       # Install compatible Netlify CLI
       - name: Install Netlify CLI
         if: ${{ github.event_name == 'push' }}

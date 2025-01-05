@@ -6,15 +6,39 @@ on:
   pull_request:
     branches: [main]
     types: [opened, synchronize]
+
 jobs:
-  deploy:
+  avoid_redundancy:
     runs-on: ubuntu-22.04
-    # las acciones se pueden componer de otras acciones
     steps:
       - name: Cancel Previous Redundatn Builds
         uses: styfle/cancel-workflow-action@0.12.1
         with:
           access_token: ${{ github.token }}
+
+  lint:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v2
+        with:
+      # solo se trae el último commit, va más rápido
+          fetch-depth: 0
+      # ahora lo que queremos es instalar las deps y lintar el código
+      # podríamos con nvm instalar node, pero ya hay una acción escrita
+      - uses: actions/setup-node@v2
+        with:
+          # solo se trae el último commit, va más rápido
+          node-version: '14' # esto en número o en string?
+      - name: Install dependencies
+        # run: npm install --no-audit --no-fund --no-optional # para que no instale dependencias opcionales
+        run: npm ci
+      - name: Lint
+        run: npm run eslint
+
+  build:
+    runs-on: ubuntu-22.04
+    # las acciones se pueden componer de otras acciones
+    steps:
       # esta acción sirve para traernos el código del repo a nuestra máquina de CI
       # nos evita hacer a mano un git clone, pasarle el auth token, config etc
       - uses: actions/checkout@v2
@@ -30,12 +54,64 @@ jobs:
       - name: Install dependencies
         # run: npm install --no-audit --no-fund --no-optional # para que no instale dependencias opcionales
         run: npm ci
-      - name: Lint
-        run: npm run eslint
       - name: Build
         run: npm run build
+      - uses: actions/upload-artifact@v2 # con esta acción, guardamos la build para reutilizarla en el siguiente paso de test
+        with:
+          name: dist
+          path: dist
+
+  test:
+    needs: [lint, build] # hace que NO se ejecute en paralelo, si no al acabar los jobs del array
+    runs-on: ubuntu-22.04
+    # las acciones se pueden componer de otras acciones
+    steps:
+      # esta acción sirve para traernos el código del repo a nuestra máquina de CI
+      # nos evita hacer a mano un git clone, pasarle el auth token, config etc
+      - uses: actions/checkout@v2
+        with:
+          # solo se trae el último commit, va más rápido
+          fetch-depth: 0
+      # ahora lo que queremos es instalar las deps y lintar el código
+      # podríamos con nvm instalar node, pero ya hay una acción escrita
+      - uses: actions/setup-node@v2
+        with:
+          # solo se trae el último commit, va más rápido
+          node-version: '14' # esto en número o en string?
+      - name: Install dependencies
+        # run: npm install --no-audit --no-fund --no-optional # para que no instale dependencias opcionales
+        run: npm ci
+      - uses: actions/download-artifact@v2 # descargamos el artefacto de build
+        with:
+          name: dist
+          path: dist
       - name: Test
         run: npm test
+
+  e2e:
+    needs: [lint, build] # hace que NO se ejecute en paralelo, si no al acabar los jobs del array
+    runs-on: ubuntu-22.04
+    # las acciones se pueden componer de otras acciones
+    steps:
+      # esta acción sirve para traernos el código del repo a nuestra máquina de CI
+      # nos evita hacer a mano un git clone, pasarle el auth token, config etc
+      - uses: actions/checkout@v2
+        with:
+          # solo se trae el último commit, va más rápido
+          fetch-depth: 0
+      # ahora lo que queremos es instalar las deps y lintar el código
+      # podríamos con nvm instalar node, pero ya hay una acción escrita
+      - uses: actions/setup-node@v2
+        with:
+          # solo se trae el último commit, va más rápido
+          node-version: '14' # esto en número o en string?
+      - name: Install dependencies
+        # run: npm install --no-audit --no-fund --no-optional # para que no instale dependencias opcionales
+        run: npm ci
+      - uses: actions/download-artifact@v2 # descargamos el artefacto de build
+        with:
+          name: dist
+          path: dist
       - name: E2E tests
         uses: cypress-io/github-action@v2
         with:
@@ -44,6 +120,18 @@ jobs:
           start: npm run start-test
           # le decimos que tiene que esperar a que el front se levante antes de ejecutar los tests
           wait-on: 'http://localhost:5000'
+
+  deploy:
+    needs: [test, e2e]
+    runs-on: ubuntu-22.04
+    # las acciones se pueden componer de otras acciones
+    steps:
+      # esta acción sirve para traernos el código del repo a nuestra máquina de CI
+      # nos evita hacer a mano un git clone, pasarle el auth token, config etc
+      - uses: actions/checkout@v2
+        with:
+          # solo se trae el último commit, va más rápido
+          fetch-depth: 0
       # Install compatible Netlify CLI
       - name: Install Netlify CLI
         if: ${{ github.event_name == 'push' }}

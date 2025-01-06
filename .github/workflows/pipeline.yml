@@ -7,6 +7,11 @@ on:
     branches: [main]
     types: [opened, synchronize]
 
+# para evitar que se ejecuten múltiples jobs de manera innecesaria (redundantes), también podemos utilizar 'concurrency'
+# concurrency 
+  # group: ci-${{ github.ref }} # nos da la rama o etiqueta que ha desencadenado la función del grupo de trabajo. En este caso, nos da como una pull request id. Lo que hacemos es agruparlos por id, y eliminar los redundantes
+  # cancel-in-progress: true
+
 jobs:
   avoid_redundancy:
     runs-on: ubuntu-22.04
@@ -18,6 +23,12 @@ jobs:
 
   install:
     runs-on: ubuntu-22.04
+
+    # si nuestro proyecto tiene que soportar diferentes versiones de node, podemos usar matrices. Se suele utilizar para probar una biblioteca en diferentes versiones. Las ejecuta en paralelo
+    # strategy:
+    #   matrix:
+    #     node-version: [18.x, 20.x, 22.x]
+
     steps:
       - uses: actions/checkout@v2
         with:
